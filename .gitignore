@@ -1,0 +1,79 @@
+# ── Python ──
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# ── Virtual Environment ──
+.env
+.venv
+env/
+venv/
+ENV/
+
+# ── IDE ──
+.idea/
+.vscode/
+*.swp
+*.swo
+*.swn
+.DS_Store
+Thumbs.db
+
+# ── Logs ──
+*.log
+logs/
+log/
+
+# ── Project local ──
+.env.local
+.env.*.local
+
+# ── Node / Frontend ──
+node_modules/
+dist/
+.vite/
+
+# ── Data / Cache ──
+*.csv
+*.parquet
+*.db
+chroma_db/
+chroma_data/
+
+# ── GraphRAG (third-party with embedded API keys) ──
+01_AssistGen 后端源码/fufan_deepseek_agent/llm_backend/app/graphrag/
+
+# ── Claude ──
+.claude/
+
+# ── Course videos (large files) ──
+实战项目一：智能客服Agent项目开发-AssistGen/
+
+# ── Docs / courseware (may contain embedded API keys) ──
+01_AssistGen 后端源码/fufan_deepseek_agent/llm_backend/docs/
+
+# ── Personal documents ──
+*面试指南*.md
+简历项目描述.md
+
+# ── Other ──
+*.zip
+*.png
+main_graph.png
