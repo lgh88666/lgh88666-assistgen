@@ -1,4 +1,4 @@
-# ── Python ──
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
@@ -20,14 +20,20 @@ wheels/
 .installed.cfg
 *.egg
 
-# ── Virtual Environment ──
+# Virtual environments
 .env
-.venv
+.venv/
 env/
 venv/
 ENV/
 
-# ── IDE ──
+# Local environment files
+.env.local
+.env.*.local
+backend/llm_backend/.env
+frontend/.env
+
+# IDE / OS
 .idea/
 .vscode/
 *.swp
@@ -36,44 +42,64 @@ ENV/
 .DS_Store
 Thumbs.db
 
-# ── Logs ──
+# Logs
 *.log
 logs/
 log/
+backend/llm_backend/logs/
+frontend/*-dev.log
+frontend/vite-*.log
 
-# ── Project local ──
-.env.local
-.env.*.local
-
-# ── Node / Frontend ──
+# Node / frontend
 node_modules/
-dist/
+frontend/node_modules/
+frontend/dist/
 .vite/
 
-# ── Data / Cache ──
-*.csv
+# Runtime data / local databases
 *.parquet
 *.db
 chroma_db/
 chroma_data/
+.data/
+.qdrant-initialized
+backend/llm_backend/.qdrant-initialized
+backend/llm_backend/.cache/
+backend/.cache/
 
-# ── GraphRAG (third-party with embedded API keys) ──
-01_AssistGen 后端源码/fufan_deepseek_agent/llm_backend/app/graphrag/
+# Keep demo ecommerce CSV files, ignore ad-hoc CSV exports elsewhere.
+*.csv
+!backend/llm_backend/app/data/*.csv
 
-# ── Claude ──
-.claude/
+# Local tool binaries
+.tools/
 
-# ── Course videos (large files) ──
-实战项目一：智能客服Agent项目开发-AssistGen/
-
-# ── Docs / courseware (may contain embedded API keys) ──
-01_AssistGen 后端源码/fufan_deepseek_agent/llm_backend/docs/
-
-# ── Personal documents ──
-*面试指南*.md
-简历项目描述.md
-
-# ── Other ──
+# Large or private artifacts
 *.zip
 *.png
+*.pdf
 main_graph.png
+backend/llm_backend/uploads/
+
+# Local assistant metadata
+.claude/
+AGENTS.md
+CLAUDE.md
+
+# Local one-off diagnostics
+check_db.py
+
+# Old package-level notes are kept locally; the root README is the public entry.
+backend/README.md
+backend/CHANGELOG.md
+
+# Historical local archive. Keep it out of the public repository unless curated.
+archive/
+
+# Internal working documents. Keep public docs curated and minimal.
+docs/*
+!docs/architecture.md
+!docs/v3_memory_architecture.md
+!docs/assistgen_architecture.drawio
+!docs/archive/
+docs/archive/*

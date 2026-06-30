@@ -1,107 +1,181 @@
-# AssistGen — 智能客服 Agent 项目
+# AssistGen
 
-基于 **LangGraph + Neo4j + RAG** 构建的智能客服系统，支持自然语言查询商品知识图谱、多轮对话、文件/图片分析，并通过 Agent 自主决策完成复杂查询链路。
+**AssistGen** is a compact multi-agent ecommerce shopping assistant. It is designed as a learning and portfolio project for agentic application development: product retrieval, graph-based recommendations, explanation generation, memory management, quality control, and observable agent execution.
 
-## 项目架构
+[中文说明](./README.zh-CN.md) | [Architecture](./docs/architecture.md) | [Memory Design](./docs/v3_memory_architecture.md) | [MIT License](./LICENSE)
 
+## Why AssistGen
+
+Most shopping bots stop at FAQ-style answers. AssistGen focuses on the complete shopping guidance loop:
+
+- understand the user's intent, budget, preferences, and conversation context
+- retrieve grounded product facts from hybrid RAG
+- recommend related products through product-graph relations
+- explain recommendations in a buyer-friendly way
+- review the final answer with a Critic gate before responding
+- stream agent progress to the frontend for observability and learning
+
+## Architecture
+
+```mermaid
+flowchart LR
+  U["User"] --> M["Memory Layer"]
+  M --> Q["Query Understanding"]
+  Q --> S["Supervisor Agent"]
+  S --> R["Retrieval Agent<br/>Qdrant + BM25 + Reranker"]
+  R --> G["Recommendation Agent<br/>Product Graph Relations"]
+  G --> E["Explanation Agent<br/>Lightweight GraphRAG Evidence"]
+  E --> C["Critic Agent<br/>Quality Gate"]
+  C --> F["Final Answer"]
 ```
-用户输入
-  └─ Router（问题分类）
-       ├─ 闲聊 → LLM 直接回复
-       ├─ 信息不足 → 追问用户（Guardrails 边界检查）
-       ├─ 图片 → 视觉模型分析
-       ├─ 文件 → 提取文本分析
-       └─ 知识库查询 → KG 子图（核心）
-              ├─ Guardrails（经营范围检查）
-              ├─ Planner（任务分解）
-              ├─ Tool Selection（Map：并行工具选择）
-              │    ├─ Text2Cypher（LLM 生成 Cypher 查询 Neo4j）
-              │    ├─ Predefined Cypher（高频查询预置）
-              │    └─ GraphRAG（向量检索）
-              ├─ Summarize（Reduce：汇总结果）
-              └─ Final Answer
+
+## Key Features
+
+- **Multi-agent orchestration**: Supervisor, Retrieval, Recommendation, Explanation, and Critic.
+- **Hybrid retrieval**: Qdrant dense retrieval, BM25 sparse retrieval, metadata filtering, score fusion, and optional `gte-rerank-v2`.
+- **Graph-based recommendation**: product relation data such as `COMPLEMENTS`, `BOUGHT_WITH`, `UPGRADE`, `BUNDLE`, and `SUBSTITUTE`.
+- **Lightweight GraphRAG explanation**: relation evidence is retrieved and used to produce human-readable recommendation reasons.
+- **Memory and context management**: session memory, `shopping_state`, `effective_query`, per-agent memory views, and compression for longer conversations.
+- **Critic quality gate**: checks factual grounding, budget constraints, recommendation timing, formatting, and tone.
+- **Observability**: backend Agent Trace Console and frontend SSE stage streaming.
+- **Offline-friendly fallbacks**: the app can still run with local CSV data and in-memory session storage when Qdrant, Redis, Neo4j, or external APIs are unavailable.
+
+## Tech Stack
+
+| Area | Stack |
+|---|---|
+| Backend | Python, FastAPI, Pydantic |
+| Agent Runtime | LangGraph-style agent pipeline |
+| Frontend | Vue 3, Vite, TypeScript, Pinia |
+| Retrieval | Qdrant, BM25, optional external reranker |
+| Graph / Recommendation | CSV product graph, optional Neo4j fallback |
+| Memory | Redis with in-memory fallback |
+| LLM / Embedding | DeepSeek-compatible chat API, DashScope `text-embedding-v4`, `gte-rerank-v2` |
+
+## Repository Structure
+
+```text
+AssistGen/
+├── backend/                  # FastAPI backend and agent pipeline
+│   ├── requirements.txt
+│   └── llm_backend/
+│       ├── app/
+│       │   ├── api/          # HTTP and SSE APIs
+│       │   ├── core/         # configuration, database, logging
+│       │   ├── data/         # demo ecommerce product data
+│       │   └── lg_agent/     # multi-agent core
+│       ├── scripts/          # indexing, verification, and test scripts
+│       └── run.py
+├── frontend/                 # Vue 3 frontend
+├── docs/                     # architecture, memory design, progress notes
+├── scripts/                  # local infrastructure helpers
+├── docker-compose.yml        # optional infrastructure setup
+└── README.md
 ```
 
-## 技术栈
+## Quick Start
 
-| 层级 | 技术 |
-|------|------|
-| **后端框架** | Python FastAPI + Pydantic + LangGraph |
-| **大模型** | DeepSeek API / Ollama 本地模型（qwen2.5、deepseek-r1） |
-| **知识图谱** | Neo4j 图数据库 |
-| **RAG** | 向量检索 + Few-shot Cypher 示例 + LLM Query Rewrite + Rerank |
-| **前端** | Vue 3 |
-| **基础设施** | Redis 缓存、MySQL 持久化、Docker 部署 |
-
-## 核心特性
-
-- **Agent 自主决策**：LangGraph 编排多步骤工作流，Agent 根据问题自动选择工具
-- **Text2Cypher**：LLM 根据自然语言生成 Cypher 查询语句，配合 Few-shot 示例和 LLM 校验
-- **Guardrails 边界守卫**：判断用户问题是否在业务范围内，避免无效查询
-- **Map-Reduce 并行处理**：Planner 拆解子任务，并行执行工具调用，汇总结果
-- **多模态支持**：支持图片分析（视觉模型）和文件（PDF/文本）内容提取
-- **缓存优化**：Redis 缓存覆盖 RAG 检索和模型调用结果，降低延迟
-
-## 快速开始
-
-### 前置依赖
-
-- Python 3.10+
-- Neo4j 数据库
-- Redis（可选，缓存用）
-- Ollama（可选，本地模型用）
-
-### 安装
+### 1. Backend
 
 ```bash
-# 克隆仓库
-git clone https://github.com/lgh88666/assistgen.git
-cd assistgen
-
-# 创建虚拟环境
-cd "01_AssistGen 后端源码/fufan_deepseek_agent/llm_backend"
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-# 或 .\venv\Scripts\activate  # Windows
-
-# 安装依赖
-pip install -r requirements.txt
-
-# 配置环境变量
-cp ../.env.example .env
-# 编辑 .env 填入你的 API Key 和数据库配置
+cd backend/llm_backend
+python -m venv .venv
+.venv/Scripts/activate
+pip install -r ../requirements.txt
+copy .env.example .env
+python run.py
 ```
 
-### 启动
+Backend default URL:
+
+```text
+http://localhost:8000
+```
+
+Main Agent endpoints:
+
+```text
+POST /api/agent/query
+POST /api/agent/query/stream
+```
+
+### 2. Frontend
 
 ```bash
-uvicorn app.main:app --reload
+cd frontend
+npm install
+npm run dev
 ```
 
-API 默认运行在 `http://localhost:8000`。
+Frontend default URL:
 
-## 项目结构
+```text
+http://localhost:5173
+```
 
+### 3. Optional Qdrant Indexing
+
+If Qdrant is running locally:
+
+```bash
+cd backend/llm_backend
+python scripts/index_products_to_qdrant.py
+python scripts/index_explanation_evidence_to_qdrant.py
 ```
-01_AssistGen 后端源码/fufan_deepseek_agent/llm_backend/
-├── app/
-│   ├── lg_agent/                # 智能客服 Agent 主模块
-│   │   ├── lg_builder.py        # 主图构建（路由 + 节点编排）
-│   │   ├── lg_states.py         # 状态定义
-│   │   ├── lg_prompts.py        # 提示词模板
-│   │   └── kg_sub_graph/        # KG 子图
-│   │       ├── agentic_rag_agents/workflows/multi_agent/
-│   │       │   └── multi_tool.py     # 子图入口（Map-Reduce 编排）
-│   │       ├── agentic_rag_agents/components/
-│   │       │   ├── guardrails/       # 边界检查
-│   │       │   ├── planner/          # 任务分解
-│   │       │   ├── tool_selection/   # 工具选择
-│   │       │   ├── cypher_tools/     # Text2Cypher 生成与执行
-│   │       │   ├── predefined_cypher/# 高频 Cypher 预置
-│   │       │   └── customer_tools/   # GraphRAG 工具
-│   │       └── ...
-│   ├── core/                    # 核心配置
-│   └── ...
-├── 02_AssistGen 前端源码/        # Vue 3 前端
-└── ...
+
+If Qdrant is not available, AssistGen falls back to local retrieval paths where possible.
+
+## Environment Variables
+
+Copy the example file:
+
+```bash
+cd backend/llm_backend
+copy .env.example .env
 ```
+
+Important variables:
+
+| Variable | Description |
+|---|---|
+| `AGENT_SERVICE` | `deepseek` or `ollama` |
+| `DEEPSEEK_API_KEY` | Chat model API key |
+| `DEEPSEEK_BASE_URL` | DeepSeek-compatible API base URL |
+| `DEEPSEEK_MODEL` | Chat model name |
+| `EMBEDDING_PROVIDER` | `local` or `dashscope` |
+| `EMBEDDING_MODEL` | default: `text-embedding-v4` |
+| `EMBEDDING_API_KEY` | embedding API key when using DashScope |
+| `RERANKER_PROVIDER` | set to `dashscope` to enable external reranking |
+| `RERANKER_MODEL` | default: `gte-rerank-v2` |
+| `QDRANT_URL` | Qdrant endpoint |
+| `REDIS_HOST` / `REDIS_PORT` | optional memory store |
+| `AGENT_TRACE` | set `true` to print compact agent trace logs |
+
+Do not commit real API keys, database passwords, or local `.env` files.
+
+## Development Checks
+
+```bash
+cd backend/llm_backend
+python -B test_memory_context.py
+python -B test_critic_quality_gate.py
+
+cd ../../frontend
+npm run build
+```
+
+## Roadmap
+
+- Expand the smart-home ecommerce demo dataset.
+- Improve graph recommendation evaluation and counterexample tests.
+- Strengthen memory compression and per-agent context injection.
+- Add cleaner deployment profiles for Docker-based Qdrant, Redis, and Neo4j.
+- Polish the frontend observability panel for learning and demos.
+
+## Project Status
+
+AssistGen is an active learning project. The current version focuses on a small but complete agentic ecommerce guidance loop rather than a production-scale commerce platform.
+
+## License
+
+MIT License.

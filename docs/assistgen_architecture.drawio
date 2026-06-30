@@ -1,0 +1,164 @@
+<mxfile host="app.diagrams.net" modified="2026-06-30T00:00:00.000Z" agent="Codex" version="24.7.17" type="device">
+  <diagram id="assistgen-architecture" name="AssistGen Architecture">
+    <mxGraphModel dx="1642" dy="981" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="title" value="AssistGen 多智能体电商导购架构图" style="text;html=1;strokeColor=none;fillColor=none;fontSize=26;fontStyle=1;fontColor=#1F2937;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="280" y="30" width="1040" height="50" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="subtitle" value="V2 已完成：混合检索 + 商品关系推荐 + 轻量 GraphRAG 解释 + Critic 质量门&#xa;V3 已完成：会话记忆 + 有效查询改写 + 分 Agent 记忆视图" style="text;html=1;strokeColor=none;fillColor=none;fontSize=14;fontColor=#4B5563;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="260" y="80" width="1080" height="50" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="clientGroup" value="客户端 / 前端" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EEF2FF;strokeColor=#6366F1;fontStyle=1;fontSize=15;verticalAlign=top;spacingTop=12;" vertex="1" parent="1">
+          <mxGeometry x="50" y="180" width="220" height="310" as="geometry"/>
+        </mxCell>
+        <mxCell id="frontend" value="Vue 3 前端&#xa;- 导购聊天界面&#xa;- Agent 思考面板&#xa;- SSE 阶段进度&#xa;- localStorage 保存 session_id&#xa;- 新对话按钮" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#A5B4FC;fontSize=13;align=left;spacing=12;" vertex="1" parent="1">
+          <mxGeometry x="80" y="240" width="160" height="180" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="apiGroup" value="FastAPI 后端" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFDF5;strokeColor=#10B981;fontStyle=1;fontSize=15;verticalAlign=top;spacingTop=12;" vertex="1" parent="1">
+          <mxGeometry x="330" y="160" width="940" height="560" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="api" value="API 接入层&#xa;/api/agent/query&#xa;/api/agent/query/stream" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6EE7B7;fontSize=13;align=center;" vertex="1" parent="1">
+          <mxGeometry x="370" y="230" width="170" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="memory" value="记忆层&#xa;- Redis 优先的会话记忆&#xa;- InMemory 降级&#xa;- shopping_state&#xa;- effective_query&#xa;- 分 Agent 记忆视图" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F0FDFA;strokeColor=#14B8A6;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="590" y="210" width="210" height="130" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="understanding" value="需求理解层&#xa;- 购买意图识别&#xa;- 预算抽取&#xa;- 品类抽取&#xa;- 排序目标识别&#xa;- 售后/投诉意图" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#64748B;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="850" y="210" width="190" height="130" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="supervisor" value="Supervisor Agent&#xa;路由与编排&#xa;- 闲聊 / 售后&#xa;- 商品检索&#xa;- 澄清追问&#xa;- 投诉场景抑制推销" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7ED;strokeColor=#F97316;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="210" width="160" height="130" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="retrieval" value="Retrieval Agent&#xa;混合检索链路&#xa;- Qdrant 向量检索&#xa;- BM25 稀疏检索&#xa;- 元数据过滤&#xa;- 分数融合&#xa;- gte-rerank-v2 重排" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EFF6FF;strokeColor=#3B82F6;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="390" y="430" width="190" height="150" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="recommendation" value="Recommendation Agent&#xa;商品关系推荐&#xa;- 单跳商品关系&#xa;- 关系权重&#xa;- 业务权重&#xa;- 避免重复 / 被拒商品" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDF2F8;strokeColor=#EC4899;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="630" y="430" width="190" height="150" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="explanation" value="Explanation Agent&#xa;轻量 GraphRAG 风格解释&#xa;- Qdrant 证据&#xa;- 关系标签&#xa;- 面向买家的解释&#xa;- 不编造候选外商品" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAF5FF;strokeColor=#A855F7;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="870" y="430" width="210" height="150" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="critic" value="Critic Agent&#xa;最终质量门&#xa;- 事实一致性&#xa;- 预算匹配&#xa;- 策略匹配&#xa;- 可读性&#xa;- 人性化语气" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF2F2;strokeColor=#EF4444;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1120" y="430" width="120" height="150" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="final" value="最终回复&#xa;结构化导购回答&#xa;+ 可选语气润色" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#111827;fontSize=13;align=center;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="860" y="640" width="210" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="infraGroup" value="数据与基础设施" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFBEB;strokeColor=#F59E0B;fontStyle=1;fontSize=15;verticalAlign=top;spacingTop=12;" vertex="1" parent="1">
+          <mxGeometry x="50" y="780" width="1220" height="240" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="qdrant" value="Qdrant 向量库&#xa;- assistgen_products&#xa;- assistgen_explanation_evidence&#xa;- text-embedding-v4 / 512维&#xa;- 本地独立部署在 L 盘" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#FBBF24;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="90" y="850" width="220" height="120" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="redis" value="Redis / InMemory&#xa;会话记忆存储&#xa;- messages&#xa;- shopping_state&#xa;- summary&#xa;- Redis 可用时 TTL 6 小时" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#FBBF24;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="350" y="850" width="190" height="120" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="productData" value="商品数据&#xa;- 智能家居商品库&#xa;- product_relations.csv&#xa;- reason_tags&#xa;- business_weight" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#FBBF24;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="580" y="850" width="190" height="120" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="neo4j" value="Neo4j 图数据库&#xa;隐藏图查询兜底&#xa;- 复杂多跳图查询&#xa;- 明确图查询意图&#xa;- Text2Cypher 不进主链路" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#FBBF24;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="810" y="850" width="200" height="120" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="models" value="模型 API&#xa;- DeepSeek 兼容对话模型&#xa;- DashScope text-embedding-v4&#xa;- DashScope gte-rerank-v2&#xa;- 日志不打印 API Key" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#FBBF24;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="850" width="180" height="120" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="obsGroup" value="可观测性" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#475569;fontStyle=1;fontSize=15;verticalAlign=top;spacingTop=12;" vertex="1" parent="1">
+          <mxGeometry x="1310" y="220" width="230" height="300" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="trace" value="Agent Trace Console&#xa;AGENT_TRACE=true&#xa;- Memory&#xa;- Supervisor&#xa;- Retrieval&#xa;- Recommendation&#xa;- Explanation&#xa;- Critic&#xa;- Final" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#94A3B8;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1340" y="280" width="170" height="160" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="sse" value="SSE 阶段流式输出&#xa;- running / done&#xa;- compressing / compressed&#xa;- 前端思考面板" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#94A3B8;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1340" y="460" width="170" height="100" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="boundary" value="关键边界&#xa;Memory 是层不是 Agent；排序属于 Retrieval/Recommendation；GraphRAG 负责解释不负责选品；Critic 是真正的质量门。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#111827;strokeColor=#111827;fontColor=#FFFFFF;fontSize=14;align=center;spacing=12;" vertex="1" parent="1">
+          <mxGeometry x="330" y="735" width="940" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#374151;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="frontend" target="api">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#374151;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="api" target="memory">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#374151;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="memory" target="understanding">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#374151;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="understanding" target="supervisor">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#374151;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="supervisor" target="retrieval">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="1160" y="380"/><mxPoint x="485" y="380"/></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#374151;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="retrieval" target="recommendation">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#374151;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="recommendation" target="explanation">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#374151;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="explanation" target="critic">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#374151;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="critic" target="final">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="1180" y="630"/><mxPoint x="965" y="630"/></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#374151;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="final" target="frontend">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="965" y="740"/><mxPoint x="160" y="740"/></Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="d1" value="向量/证据" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=1.5;dashed=1;endArrow=block;endFill=1;fontSize=11;" edge="1" parent="1" source="retrieval" target="qdrant">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="d2" value="会话状态" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#0F766E;strokeWidth=1.5;dashed=1;endArrow=block;endFill=1;fontSize=11;" edge="1" parent="1" source="memory" target="redis">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="d3" value="商品关系" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#DB2777;strokeWidth=1.5;dashed=1;endArrow=block;endFill=1;fontSize=11;" edge="1" parent="1" source="recommendation" target="productData">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="d4" value="隐藏兜底" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#D97706;strokeWidth=1.5;dashed=1;endArrow=block;endFill=1;fontSize=11;" edge="1" parent="1" source="supervisor" target="neo4j">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="d5" value="LLM / 向量 / 重排" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7C3AED;strokeWidth=1.5;dashed=1;endArrow=block;endFill=1;fontSize=11;" edge="1" parent="1" source="explanation" target="models">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="d6" value="事件流" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;dashed=1;endArrow=block;endFill=1;fontSize=11;" edge="1" parent="1" source="api" target="sse">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="d7" value="Trace 摘要" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=1.5;dashed=1;endArrow=block;endFill=1;fontSize=11;" edge="1" parent="1" source="memory" target="trace">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
