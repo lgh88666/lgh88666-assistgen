@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <b>[ <a href="./README.md">English</a> | 中文说明 ]</b>
+  <b>[ 中文说明 | <a href="./README.en.md">English</a> ]</b>
 </p>
 
 **AssistGen** 是一个小而精的多智能体电商导购项目。它不是普通 FAQ 客服，而是围绕真实导购链路设计：理解需求、检索商品、生成搭配推荐、解释推荐理由、管理上下文，并用 Critic Agent 对最终回复做质量检查。
