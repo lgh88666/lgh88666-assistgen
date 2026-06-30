@@ -67,6 +67,17 @@ npm install
 npm run dev
 ```
 
+## Roadmap
+
+AssistGen will keep a compact but deeper focus on multi-agent ecommerce shopping guidance:
+
+- **Short term: improve shopping guidance quality**. Expand smart-home product data, scenario labels, product relations, and review-like evidence for stronger retrieval and recommendation tests.
+- **Short term: strengthen quality evaluation**. Add adversarial cases for the Critic Agent, such as budget mismatch, unnecessary add-on recommendations, and complaint scenarios.
+- **Mid term: improve memory management**. Build Redis-backed short-term memory, long-session compression, persistent `shopping_state`, and selective memory injection for each agent.
+- **Mid term: enhance recommendation reasoning**. Improve graph-based logic for complementary, substitute, upgrade, bundle, and scenario-based product relations.
+- **Mid term: improve engineering reproducibility**. Provide a Docker Compose development stack for Qdrant, Redis, Neo4j, backend, and frontend.
+- **Long term: move toward a realistic ecommerce agent**. Explore multi-turn clarification, preference learning, feedback loops, A/B evaluation, and recommendation quality metrics.
+
 ## More Docs
 
 - [Architecture](./docs/architecture.md)
